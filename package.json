@@ -4,7 +4,14 @@
 	"description": "Promise-based method for loading a script in browser",
 	"main": "es/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"clean": "rimraf ./es/* ./umd/* ./types/*",
+		"build:es": "tsc -p .",
+		"build:umd": "rollup -c",
+		"prebuild": "npm run clean",
+		"build": "npm run build:es6 && npm run build:umd",
+		"prepare": "npm run build",
+		"release": "npm run build"
 	},
 	"repository": {
 		"type": "git",
@@ -22,5 +29,11 @@
 	"bugs": {
 		"url": "https://github.com/romancow/load-script/issues"
 	},
-	"homepage": "https://github.com/romancow/load-script#readme"
+	"homepage": "https://github.com/romancow/load-script#readme",
+	"devDependencies": {
+		"rimraf": "^3.0.2",
+		"rollup": "^2.0.3",
+		"rollup-plugin-terser": "^5.3.0",
+		"typescript": "^3.8.3"
+	}
 }
