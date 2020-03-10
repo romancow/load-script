@@ -1,0 +1,26 @@
+{
+	"name": "@romancow/load-script",
+	"version": "1.0.0",
+	"description": "Promise-based method for loading a script in browser",
+	"main": "es/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/romancow/load-script.git"
+	},
+	"keywords": [
+		"load",
+		"script",
+		"async",
+		"promise",
+		"browser"
+	],
+	"author": "Sean Wilson",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/romancow/load-script/issues"
+	},
+	"homepage": "https://github.com/romancow/load-script#readme"
+}
