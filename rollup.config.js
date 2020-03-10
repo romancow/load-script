@@ -1,4 +1,5 @@
 import pkg from './package.json'
+import consts from 'rollup-plugin-consts'
 import { terser } from 'rollup-plugin-terser'
 
 export default {
@@ -11,5 +12,8 @@ export default {
 		sourcemap: true,
 		sourcemapExcludeSources: true
 	},
-	plugins: [terser()]
+	plugins: [
+		consts({ version: pkg.version }),
+		terser()
+	]
 }
