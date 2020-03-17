@@ -1,3 +1,5 @@
+import Version from 'consts:version'
+
 namespace _Object {
 
 	export function keys<T extends Object, K extends keyof T>(obj: T) {
@@ -27,6 +29,30 @@ namespace _Object {
 
 }
 
+namespace _String {
+
+	export function preventBrowserCache(src: string) {
+		const cacheId = Date.now().toString(36)
+		const separator = (src.indexOf('?') < 0) ? '?' : '&'
+		return src + separator + cacheId
+	}
+
+}
+
+namespace _Element {
+
+	export function create<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Partial<HTMLElementTagNameMap[K]>) {
+		const elem = document.createElement(tag)
+		_Object.assign(elem, attrs)
+		elem.dataset.loadScript = Version
+		return elem as HTMLElementTagNameMap[K]
+	}
+
+}
+
 export {
-	_Object as Object
+	_Object as Object,
+	_String as String,
+	_Element as Element,
+	Version
 }
