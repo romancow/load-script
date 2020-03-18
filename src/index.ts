@@ -1,11 +1,6 @@
-import LoadScriptPromise, { LoadScriptOptions, LoadScriptMapFn } from './load-script-promise'
+import LoadScriptPromise, { LoadScriptOptions } from './load-script-promise'
 
-export default async function loadScript<T>(src: string, options: LoadScriptOptions = {}) {
-	const { id = src, cache = false, map } = options
-	const fnCache = cache ? loadScriptCache : {}
-	const promise = fnCache[id] ?? (fnCache[id] = new LoadScriptPromise(src, options))
-	const mapFn = LoadScriptMapFn.ensure(map ?? promise)
-	return promise.then<T>(mapFn)
+export default async function loadScript<T>(path: string, options?: LoadScriptOptions) {
+	const promise = LoadScriptPromise.get(path, options)
+	return promise.map(options?.map)
 }
-
-const loadScriptCache = {} as { [id: string]: LoadScriptPromise }
