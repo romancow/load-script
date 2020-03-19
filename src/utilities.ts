@@ -27,6 +27,10 @@ namespace _Object {
 		return filter(obj, val =>  all ? !!val : (val != null)) as { [K in keyof T]: T[K] }
 	}
 
+	export function select<T extends Object>(obj: T, select: readonly (keyof T)[]) {
+		return filter(obj, (_, key) => _Array.includes(select, key))
+	}
+
 }
 
 namespace _String {
@@ -35,6 +39,14 @@ namespace _String {
 		const cacheId = Date.now().toString(36)
 		const separator = (src.indexOf('?') < 0) ? '?' : '&'
 		return src + separator + cacheId
+	}
+
+}
+
+namespace _Array {
+
+	export function includes(arr: readonly any[], item: any) {
+		return (arr.indexOf(item) > -1)
 	}
 
 }
@@ -53,6 +65,7 @@ namespace _Element {
 export {
 	_Object as Object,
 	_String as String,
+	_Array as Array,
 	_Element as Element,
 	Version
 }

@@ -1,11 +1,29 @@
 import * as Utilities from './utilities'
 
-export type LoadScriptPromiseOptions = {
-	type?: string
+
+type LoadScriptAttributes = {
 	async?: boolean
+	defer?: boolean
+	crossOrigin?: string
 	id?: string
+	integrity?: string
+	noModule?: boolean
+	nonce?: string
+	referrerPolicy?: string
+	type?: string
+}
+
+namespace LoadScriptAttributes {
+	export const Names: readonly (keyof LoadScriptAttributes)[] =
+		['async', 'defer', 'crossOrigin', 'id', 'integrity', 'noModule', 'nonce', 'referrerPolicy', 'type']
+
+	export function select(attrs: LoadScriptAttributes) {
+		return Utilities.Object.select(attrs, Names)
+	}
+}
+
+export type LoadScriptPromiseOptions = LoadScriptAttributes & {
 	parent?: string | Element
-	cache?: boolean,
 	force?: boolean
 }
 
@@ -28,9 +46,10 @@ export default class LoadScriptPromise extends Promise<Event> {
 	}
 
 	protected get attrs() {
-		const { path, options: { type = "text/javascript", async, id, force = true }} = this
-		const src = force ? Utilities.String.preventBrowserCache(path) : path
-		return Utilities.Object.compact({ src, type, async, id})
+		const { path, options } = this
+		const src = options.force ? Utilities.String.preventBrowserCache(path) : path
+		const attrs = LoadScriptAttributes.select(options)
+		return Utilities.Object.compact({ src, ...attrs})
 	}
 
 	map<T = HTMLScriptElement>(map?: T extends keyof Window ? T : ((ev: Event) => T)) {
@@ -42,8 +61,8 @@ export default class LoadScriptPromise extends Promise<Event> {
 
 	static Cache = {} as { [id: string]: LoadScriptPromise }
 
-	static get(path: string, options: LoadScriptPromiseOptions = {}) {
-		const { id = path, cache = false } = options
+	static get(path: string, cache: boolean, options: LoadScriptPromiseOptions = {}) {
+		const { id = path } = options
 		const lsCache = cache ? this.Cache : {}
 		return lsCache[id] ?? (lsCache[id] = new this(path, options))
 	}
