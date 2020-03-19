@@ -9,7 +9,7 @@
 		"build:es": "tsc -p .",
 		"build:umd": "rollup -c",
 		"prebuild": "npm run clean",
-		"build": "npm run build:es6 && npm run build:umd",
+		"build": "npm run build:es && npm run build:umd",
 		"prepare": "npm run build",
 		"release": "npm run build"
 	},
