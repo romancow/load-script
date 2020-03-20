@@ -6,7 +6,7 @@ export default {
 	input: pkg.module,
 	context: 'window',
 	output: {
-		name: "LoadScript",
+		name: 'loadScript',
 		file: pkg.browser,
 		format: 'umd',
 		sourcemap: true,

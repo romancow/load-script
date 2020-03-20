@@ -1,7 +1,7 @@
 {
 	"name": "@romancow/load-script",
 	"version": "1.0.0",
-	"description": "Promise-based method for loading a script in browser",
+	"description": "Promise-based method for dynamically loading scripts in browser with TypeScript support",
 	"main": "umd/index.js",
 	"module": "es/index.js",
 	"browser": "umd/index.js",
@@ -30,7 +30,8 @@
 		"script",
 		"async",
 		"promise",
-		"browser"
+		"browser",
+		"typescript"
 	],
 	"author": "Sean Wilson",
 	"license": "ISC",
