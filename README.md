@@ -32,7 +32,7 @@ import loadScript from '@romancow/load-script'
 
 Or use a traditional script tag:
 ```html
-<script type="text/javascript" src="js/load-script.js"></script>
+<script src="load-script.js"></script>
 ```
 
 Then use `loadScript` as a function to load javascript at a given url:
@@ -48,7 +48,7 @@ or
 ```javascript
 loadScript("some/js/lib.js").then(function () {
 	// do stuff script needs to be loaded for
-})
+});
 ```
 
 ### Options
@@ -82,6 +82,14 @@ And then a few more "advanced" options:
 	<dt><code>map</code> (string | Function)</dt>
 	<dd>A global variable or function dictating the resolved value of <code>loadScript</code>'s returned promise. Unlike other options, this value will be evaluated each time <code>loadScript</code> is called, whether it's retrieved from cache or not. Will be the corresponding script's element by default.<dd>
 </dl>
+
+```javascript
+const $ = await loadScript("https://code.jquery.com/jquery-3.4.1.min.js", {
+	integrity: "sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=",
+	crossOrigin: "anonymous",
+	map: function() { return jQuery.noConflict() }
+});
+```
 
 ## License
 [ISC](https://opensource.org/licenses/ISC)
