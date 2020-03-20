@@ -14,32 +14,32 @@ export type LoadScriptOptions<T> = LoadScriptPromiseOptions & {
 /**
  * Loads the given script as an `HTMLScriptElement`.
  *
- * @param path - Path to the script to load
+ * @param url - Url of the script to load
  * @param options - Script load options
  * @returns A promise for the loaded script's `HTMLScriptElement`
  */
-function loadScript(path: string, options?: LoadScriptPromiseOptions): Promise<HTMLScriptElement>
+function loadScript(url: string, options?: LoadScriptPromiseOptions): Promise<HTMLScriptElement>
 /**
  * Loads the given script as an `HTMLScriptElement`.
  *
  * @template K - Window key of the return value
- * @param path - Path to the script to load
+ * @param url - Url of the script to load
  * @param options - Script load options with a `map` key of a window value to return
  * @returns A promise for the specified Window value after the script is loaded
  */
-function loadScript<K extends keyof Window>(path: string, options: LoadScriptOptions<K>): Promise<Window[K]>
+function loadScript<K extends keyof Window>(url: string, options: LoadScriptOptions<K>): Promise<Window[K]>
 /**
  * Loads the given script as an `HTMLScriptElement`.
  *
  * @template T - The type of value to return a promise for
- * @param path - Path to the script to load
+ * @param url - Url of the script to load
  * @param options - Script load options with a `map` function to retrieve the return value
  * @returns A promise for the value returned by the `map` function after the script is loaded
  */
-function loadScript<T>(path: string, options: LoadScriptOptions<T>): Promise<T>
-function loadScript<T>(path: string, options?: LoadScriptOptions<T>) {
+function loadScript<T>(url: string, options: LoadScriptOptions<T>): Promise<T>
+function loadScript<T>(url: string, options?: LoadScriptOptions<T>) {
 	const { cache = false, map } = options ?? {}
-	const promise = LSPromise.get(path, cache, options)
+	const promise = LSPromise.get(url, cache, options)
 	return promise.map<T>(map)
 }
 

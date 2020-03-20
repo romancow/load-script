@@ -51,10 +51,10 @@ export default class LoadScriptPromise extends Promise<Event> {
 	/**
 	 * Creates an instance of LoadScriptPromise.
 	 *
-	 * @param path - Path to the script to load.
+	 * @param url - Url of the script to load.
 	 * @param options - Options for loading the given script.
 	 */
-	constructor(readonly path: string, readonly options: LoadScriptPromiseOptions = {}) {
+	constructor(readonly url: string, readonly options: LoadScriptPromiseOptions = {}) {
 		super((onload, onerror) => {
 			const attrs = { ...this.attrs, onload, onerror }
 			this.element = Utilities.Element.create('script', attrs)
@@ -71,7 +71,7 @@ export default class LoadScriptPromise extends Promise<Event> {
 
 	/** Gets the attributes for the created script element. */
 	protected get attrs() {
-		const { path, options } = this
+		const { url: path, options } = this
 		const src = options.force ? Utilities.String.preventBrowserCache(path) : path
 		const attrs = LoadScriptAttributes.select(options)
 		return Utilities.Object.compact({ src, ...attrs})
@@ -97,14 +97,14 @@ export default class LoadScriptPromise extends Promise<Event> {
 	/**
 	 * Gets a promise for the script either from cache or by creating a new one.
 	 *
-	 * @param path - Path for the script to get from cache or create
+	 * @param url - Url for the script to get from cache or create
 	 * @param cache - Whether to check cache for the give script before creating
 	 * @param options - Options used to load new script (not used if found in cache)
 	 * @returns Promise for loading the given script, either new or from cache
 	 */
-	static get(path: string, cache: boolean, options: LoadScriptPromiseOptions = {}) {
-		const { id = path } = options
+	static get(url: string, cache: boolean, options: LoadScriptPromiseOptions = {}) {
+		const { id = url } = options
 		const lsCache = cache ? this.Cache : {}
-		return lsCache[id] ?? (lsCache[id] = new this(path, options))
+		return lsCache[id] ?? (lsCache[id] = new this(url, options))
 	}
 }
