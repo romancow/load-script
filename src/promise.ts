@@ -2,14 +2,23 @@ import * as Utilities from './utilities'
 
 
 type LoadScriptAttributes = {
+	/** The script's "async" attribute */
 	async?: boolean
+	/** The script's "defer" attribute */
 	defer?: boolean
+	/** The script's "crossorigin" attribute */
 	crossOrigin?: string
+	/** Cache id and script element's "id" attribute */
 	id?: string
+	/** The script's "integrity" attribute */
 	integrity?: string
+	/** The script's "nomodule" attribute */
 	noModule?: boolean
+	/** The script's "nonce" attribute */
 	nonce?: string
+	/** The script's "referrerpolicy" attribute */
 	referrerPolicy?: string
+	/** The script's "type" attribute */
 	type?: string
 }
 
@@ -22,15 +31,29 @@ namespace LoadScriptAttributes {
 	}
 }
 
+/**
+ * Script load options.
+ * More details on the attribute options [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes).
+ * */
 export type LoadScriptPromiseOptions = LoadScriptAttributes & {
+	/** The element or query selector of the element to append the created script element to */
 	parent?: string | Element
+	/** Whether to "force" the script to reload by appending a query string to circumvent browser caching */
 	force?: boolean
 }
 
+/** Custom promise that resolves when the associated script is loaded. */
 export default class LoadScriptPromise extends Promise<Event> {
 
+	/** The script element created by the promise */
 	element!: HTMLScriptElement
 
+	/**
+	 * Creates an instance of LoadScriptPromise.
+	 *
+	 * @param path - Path to the script to load.
+	 * @param options - Options for loading the given script.
+	 */
 	constructor(readonly path: string, readonly options: LoadScriptPromiseOptions = {}) {
 		super((onload, onerror) => {
 			const attrs = { ...this.attrs, onload, onerror }
@@ -39,12 +62,14 @@ export default class LoadScriptPromise extends Promise<Event> {
 		})
 	}
 
+	/** Gets the parent element the created script element should be appended to */
 	protected get parent() {
 		const { parent = document.head } = this.options
 		return (parent instanceof Element) ? parent :
 			document.querySelector(parent) ?? document.head
 	}
 
+	/** Gets the attributes for the created script element. */
 	protected get attrs() {
 		const { path, options } = this
 		const src = options.force ? Utilities.String.preventBrowserCache(path) : path
@@ -52,6 +77,13 @@ export default class LoadScriptPromise extends Promise<Event> {
 		return Utilities.Object.compact({ src, ...attrs})
 	}
 
+	/**
+	 * Maps the promise value to another based on a global (`window`) value or method return value.
+	 *
+	 * @template T - `window` key or method return type
+	 * @param map - Global key or map function that dictates the promise's value
+	 * @returns A promise for the mapped value
+	 */
 	map<T = HTMLScriptElement>(map?: T extends keyof Window ? T : ((ev: Event) => T)) {
 		const mapFn = (map != null) ? (map instanceof Function) ?
 			map : () => window[map as keyof Window] : () => this.element
@@ -59,8 +91,17 @@ export default class LoadScriptPromise extends Promise<Event> {
 	}
 
 
+	/** Cache for created scripts */
 	static Cache = {} as { [id: string]: LoadScriptPromise }
 
+	/**
+	 * Gets a promise for the script either from cache or by creating a new one.
+	 *
+	 * @param path - Path for the script to get from cache or create
+	 * @param cache - Whether to check cache for the give script before creating
+	 * @param options - Options used to load new script (not used if found in cache)
+	 * @returns Promise for loading the given script, either new or from cache
+	 */
 	static get(path: string, cache: boolean, options: LoadScriptPromiseOptions = {}) {
 		const { id = path } = options
 		const lsCache = cache ? this.Cache : {}

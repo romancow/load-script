@@ -1,12 +1,41 @@
 import LSPromise, { LoadScriptPromiseOptions } from './promise'
 
+/**
+ * Script load options
+ * More details on the attribute options [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#Attributes).
+ * */
 export type LoadScriptOptions<T> = LoadScriptPromiseOptions & {
+	/** Whether to get/set the script in cache */
 	cache?: boolean
+	/** The key of the window value or retrieval function for the `loadScript` function to return */
 	map?: T extends keyof Window ? T : (event: Event) => T
 }
 
+/**
+ * Loads the given script as an `HTMLScriptElement`.
+ *
+ * @param path - Path to the script to load
+ * @param options - Script load options
+ * @returns A promise for the loaded script's `HTMLScriptElement`
+ */
 function loadScript(path: string, options?: LoadScriptPromiseOptions): Promise<HTMLScriptElement>
+/**
+ * Loads the given script as an `HTMLScriptElement`.
+ *
+ * @template K - Window key of the return value
+ * @param path - Path to the script to load
+ * @param options - Script load options with a `map` key of a window value to return
+ * @returns A promise for the specified Window value after the script is loaded
+ */
 function loadScript<K extends keyof Window>(path: string, options: LoadScriptOptions<K>): Promise<Window[K]>
+/**
+ * Loads the given script as an `HTMLScriptElement`.
+ *
+ * @template T - The type of value to return a promise for
+ * @param path - Path to the script to load
+ * @param options - Script load options with a `map` function to retrieve the return value
+ * @returns A promise for the value returned by the `map` function after the script is loaded
+ */
 function loadScript<T>(path: string, options: LoadScriptOptions<T>): Promise<T>
 function loadScript<T>(path: string, options?: LoadScriptOptions<T>) {
 	const { cache = false, map } = options ?? {}
