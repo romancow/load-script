@@ -2,7 +2,15 @@
 	"name": "@romancow/load-script",
 	"version": "1.0.0",
 	"description": "Promise-based method for loading a script in browser",
-	"main": "es/index.js",
+	"main": "umd/index.js",
+	"module": "es/index.js",
+	"browser": "umd/index.js",
+	"types": "types/index.d.ts",
+	"files": [
+		"es/**.js",
+		"umd/**.js",
+		"types/"
+	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"clean": "rimraf ./es/* ./umd/* ./types/*",
