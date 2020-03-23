@@ -43,10 +43,17 @@ export type LoadScriptPromiseOptions = LoadScriptAttributes & {
 }
 
 /** Custom promise that resolves when the associated script is loaded. */
-export default class LoadScriptPromise extends Promise<Event> {
+export default class LoadScriptPromise implements PromiseLike<Event> {
 
 	/** The script element created by the promise */
 	element!: HTMLScriptElement
+	/**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+	then: Promise<Event>['then']
 
 	/**
 	 * Creates an instance of LoadScriptPromise.
@@ -55,11 +62,12 @@ export default class LoadScriptPromise extends Promise<Event> {
 	 * @param options - Options for loading the given script.
 	 */
 	constructor(readonly url: string, readonly options: LoadScriptPromiseOptions = {}) {
-		super((onload, onerror) => {
+		const promise = new Promise<Event>((onload, onerror) => {
 			const attrs = { ...this.attrs, onload, onerror }
 			this.element = Utilities.Element.create('script', attrs)
 			this.parent.appendChild(this.element)
 		})
+		this.then = (...args) => promise.then(...args)
 	}
 
 	/** Gets the parent element the created script element should be appended to */
