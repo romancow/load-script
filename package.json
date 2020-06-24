@@ -1,6 +1,6 @@
 {
 	"name": "@romancow/load-script",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Promise-based method for dynamically loading scripts in browser with TypeScript support",
 	"main": "umd/index.js",
 	"module": "es/index.js",
