@@ -31,12 +31,21 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: true
           prerelease: false
-      - name: Attach Asset
+      - name: Attach UMD Asset
         uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./umd/index.js
+          asset_path: ./build/load-script.js
           asset_name: load-script.js
+          asset_content_type: application/javascript
+      - name: Attach ESM Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/load-script.mjs
+          asset_name: load-script.mjs
           asset_content_type: application/javascript
