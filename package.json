@@ -2,29 +2,27 @@
 	"name": "@romancow/load-script",
 	"version": "1.0.1",
 	"description": "Promise-based method for dynamically loading scripts in browser with TypeScript support",
-	"main": "umd/index.js",
-	"module": "es/index.js",
-	"browser": "umd/index.js",
+	"main": "build/load-script.js",
+	"module": "build/load-script.mjs",
+	"browser": "build/load-script.js",
+	"unpkg": "build/load-script.js",
+	"rollup": "src/index.ts",
 	"types": "types/index.d.ts",
 	"files": [
-		"es/**.js",
-		"umd/**.js",
+		"build/",
 		"types/"
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"clean": "rimraf ./es/* ./umd/* ./types/*",
-		"build:es": "tsc -p .",
-		"build:umd": "rollup -c",
+		"clean": "rimraf ./build/* ./types/*",
+		"build:types": "tsc -p tsconfig.types.json",
 		"prebuild": "npm run clean",
-		"build": "npm run build:es && npm run build:umd",
+		"build": "rollup -c",
+		"postbuild": "npm run build:types",
 		"prepare": "npm run build",
 		"release": "npm run build"
 	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/romancow/load-script.git"
-	},
+	"repository": "git://github.com/romancow/load-script.git",
 	"keywords": [
 		"load",
 		"script",

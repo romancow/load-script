@@ -110,8 +110,7 @@ temp
 # built & distributable files
 /.nosync
 nosync.json
-/es
-/umd
+/build
 /types
 
 # nvm
